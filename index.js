@@ -1,4 +1,5 @@
 import express from 'express';
+import { userRouter } from './users/users.js'
 
 const port = '8000';
 const app = express();
@@ -17,12 +18,14 @@ const cb = (req, res, next) => {
     next();
 }
 app.get('/hello', cb, (req, res) => {
-    res.end('Привет! GET');
+    res.status(201).send({ success: true});
 });
 
 app.post('/hello', cb, (req, res) => {
-    res.end('Привет! POST');
+    res.send('Привет! POST');
 });
+
+app.use('/users', userRouter);
 
 app.listen(port, () => {
     console.log(`Сервер запущен на http://localhost:${port}`);
