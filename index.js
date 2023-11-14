@@ -13,12 +13,21 @@ app.all('/hello', (
     next();
 });
 
+app.use((
+    req,
+    res,
+    next
+) => {
+    console.log('Время ', Date.now());
+    next();
+});
+
 const cb = (req, res, next) => {
     console.log('CB');
     next();
 }
 app.get('/hello', cb, (req, res) => {
-    res.status(201).send({ success: true});
+    throw new Error('Error!!!');
 });
 
 app.post('/hello', cb, (req, res) => {
@@ -26,6 +35,15 @@ app.post('/hello', cb, (req, res) => {
 });
 
 app.use('/users', userRouter);
+app.use((
+    err,
+    req,
+    res,
+    next
+) => {
+    console.log(err.message);
+    res.status(401).send(err.message);
+});
 
 app.listen(port, () => {
     console.log(`Сервер запущен на http://localhost:${port}`);
