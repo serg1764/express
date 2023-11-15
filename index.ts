@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import { userRouter } from './users/users.js'
 
 const port = '8000';
@@ -22,7 +22,7 @@ app.use((
     next();
 });
 
-const cb = (req, res, next) => {
+const cb = (req: Request, res: Response, next: NextFunction) => {
     console.log('CB');
     next();
 }
@@ -36,10 +36,10 @@ app.post('/hello', cb, (req, res) => {
 
 app.use('/users', userRouter);
 app.use((
-    err,
-    req,
-    res,
-    next
+    err: Error,
+    req: Request,
+    res: Response,
+    next: NextFunction
 ) => {
     console.log(err.message);
     res.status(401).send(err.message);
